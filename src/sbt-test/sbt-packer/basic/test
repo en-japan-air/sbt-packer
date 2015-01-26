@@ -1,0 +1,3 @@
+# check if the config file gets created
+> packerConfigTemplate
+$ exists target/tmp/packer.json

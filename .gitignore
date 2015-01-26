@@ -1,0 +1,30 @@
+#SBT
+target
+project/project
+log
+artifacts
+
+# Mac
+.DS_Store
+!.gitkeep
+
+# Eclipse
+.classpath
+.launch
+.metadata
+.project
+.scala_dependencies
+.settings
+
+# IntelliJ
+.idea
+.idea_modules
+*.iml
+*.ipr
+*.iws
+*.sc
+.history
+
+# Logstash
+data/
+logstash/logstash.conf

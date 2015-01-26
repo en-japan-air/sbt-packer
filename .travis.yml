@@ -1,0 +1,10 @@
+language: scala
+os:
+  - linux
+scala:
+  - 2.10.4
+jdk:
+  - openjdk6
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION scripted
+
