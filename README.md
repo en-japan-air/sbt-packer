@@ -18,7 +18,14 @@ http://www.scala-sbt.org/sbt-native-packager/.
 
 Add the following to your `project/plugins.sbt` file:
 ```scala
-addSbtPlugin("com.enjapan" % "sbt-packer" % "0.0.1")
+resolvers += Resolver.url(
+  "bintray-sbt-plugin-releases",
+   url("https://dl.bintray.com/en-japan/sbt"))(
+       Resolver.ivyStylePatterns)
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-M4")
+
+addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.1")
 ```
 
 ## Usage
