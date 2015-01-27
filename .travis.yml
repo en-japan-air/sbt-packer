@@ -9,7 +9,7 @@ script:
 - sbt ++$TRAVIS_SCALA_VERSION scripted
 after_success:
 - |
-  test "${TRAVIS_BRANCH}" = 'production' && sh "$TRAVIS_BUILD_DIR/.travis.credentials.sh" && sbt publish
+  test "${TRAVIS_TAG}" && sh "$TRAVIS_BUILD_DIR/.travis.credentials.sh" && sbt publish
 env:
   global:
   - secure: dlkY+lkgveiPgRK6oERBvgl1bbTvSEnYGWw3gZ+Hf11KLhgP60+Uj6UgEu7Zs4qhMbFF/rulBWAw+c+xUSXV8fgelqHaWe0uToKaTpZ/izJPe3YX6T8r2CMoDw5dVA/nLGLftCdmjTsr04xUgfA4r7wGefuTwIgIe1HwDc4Xwms=
