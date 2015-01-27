@@ -56,4 +56,7 @@ packerSshUsername := "ubuntu"
 packerAmiName := "super-ami"
 ```
 
+## License
+Copyright 2015 en japan, Inc.
 
+Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
