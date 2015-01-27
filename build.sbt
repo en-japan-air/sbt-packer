@@ -24,7 +24,7 @@ bintrayPublishSettings
 
 bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("en-japan")
 
-bintray.Keys.repository in bintray.Keys.bintray := Some("generic")
+bintray.Keys.repository in bintray.Keys.bintray := "generic"
 
 bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("sbt", "packer", "sbt-native-packager")
 
