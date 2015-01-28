@@ -3,7 +3,7 @@ Sbt plugin for Packer.io
 
 *Branch*|*Build Status*|
 |---|---|
-|*master*|[![Build Status](https://magnum.travis-ci.com/en-japan/sbt-packer.svg?token=Fs6yxiLNnpCGj7zQMuZX)](https://magnum.travis-ci.com/en-japan/sbt-packer)|
+|*master*|[![Build Status](https://travis-ci.org/en-japan/sbt-packer.svg)](https://travis-ci.org/en-japan/sbt-packer)|
 
 Still in a work in progress since it only supports Debian/Ubuntu types of
 instances.
