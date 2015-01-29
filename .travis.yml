@@ -12,5 +12,5 @@ after_success:
   test "${TRAVIS_TAG}" && sh "$TRAVIS_BUILD_DIR/.travis.credentials.sh" && sbt publish
 env:
   global:
-  - secure: dlkY+lkgveiPgRK6oERBvgl1bbTvSEnYGWw3gZ+Hf11KLhgP60+Uj6UgEu7Zs4qhMbFF/rulBWAw+c+xUSXV8fgelqHaWe0uToKaTpZ/izJPe3YX6T8r2CMoDw5dVA/nLGLftCdmjTsr04xUgfA4r7wGefuTwIgIe1HwDc4Xwms=
-  - secure: bOhwkAGOMuycr5X8lHdt0G1nStHUG56EQ/A8IX6Y7eXC5A/duvajmbmMuPMEIhu7kX8iFgk12V9kkMFr8lN0fj0CqyJz/kozLENaMTMnyDh2qpMRhULUakB3y/HHTXrTuQRZv1qPrxKswE95DvYdz9mneItITQIH9qdNL6ADLrM=
+  - secure: CiBoRiU1EqA/PRY6KFktHsAq9QFgVk7nJVA983JOTg5cZtZ36jq2L5zI1lVzRG12B4gD/Ru0D/vloS+kXfocsPSQ7plR3c49nyp9u1UBCrFJ1LpF9kdQY+e8umG+gxyZ/HCNcU9m9yH3pKkptHxS6275Cz17PpMIJXRCTFW9e7I=
+  - secure: TQA0CHpyQsyL1W+8u2WOCIYiMbJV78socn97qwKQ0dBEuBmQ74RmpFhglWLLZtok3CC9DHFDYUhWgHYGuB6EF93AgM58M7/9cw872oAnW1v8ohi0ydnB5SEzJtWq+4ByZfn57/Uzf3P6WvMSjpv8OUUN+rL9onhqrxp8bjeIt2c=
