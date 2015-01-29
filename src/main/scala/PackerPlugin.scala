@@ -1,5 +1,7 @@
 package com.enjapan.sbt.packer
 
+import java.io.IOException
+
 import scala.util.{Try,Success}
 
 import sbt._
@@ -84,14 +86,30 @@ object PackerPlugin extends AutoPlugin {
     val packerDir = (tmpDir / (packerBin + "_" + version))
     val packerFile = (packerDir / packerBin)
     if ( !packerFile.exists ) {
-      val packerZip = "packer_" + version + "_linux_amd64.zip"
+      val os = sys.props.get("os.name").map(_.toLowerCase()).getOrElse(sys.error("Couldn't determine os")) match {
+        case s if s.contains("linux") => "linux"
+        case s if s.contains("mac") => "darwin"
+        case s => sys.error("OS not supported: " + s)
+      }
+      val arch = sys.props.get("os.arch").map(_.toLowerCase()).getOrElse(sys.error("Couldn't determine arch")) match {
+        case s if s.contains("64") => "amd64"
+        case s if s.contains("86") => "386"
+        case s => sys.error("Arch not supported: " + s)
+      }
+      val packerZip = "packer_" + version + "_" + os + "_" + arch + ".zip"
       val packerUrl = "https://dl.bintray.com/mitchellh/packer/" + packerZip
       log.info("Download Packer " + version + " at " + packerUrl)
-      Process(Seq("wget", "-q", packerUrl, "-O", packerZip), Some(tmpDir)) #&&
+      val cmdCode = Process(Seq("wget", packerUrl, "-O", packerZip), Some(tmpDir)) #&&
         Process(Seq("unzip", "-d", packerDir.getAbsolutePath(), packerZip), Some(tmpDir)) ! log
+      if(cmdCode == 0) {
+        log.info("Installed Packer in " + packerDir.getAbsolutePath)
+      } 
+      else {
+        throw new IOException("Could not retrieve Packer at " + packerUrl)
+      }
     }
     else {
-      log.info("Found previously downloaded packer in " + packerDir.getAbsolutePath())
+      log.info("Found previously downloaded Packer in " + packerDir.getAbsolutePath())
     }
     packerFile.getAbsolutePath()
   }

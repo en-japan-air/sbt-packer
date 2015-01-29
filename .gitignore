@@ -28,3 +28,5 @@ artifacts
 # Logstash
 data/
 logstash/logstash.conf
+
+*.swp

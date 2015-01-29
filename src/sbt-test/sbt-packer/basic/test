@@ -1,3 +1,0 @@
-# check if the config file gets created
-> packerConfig
-$ exists target/tmp/packer.json
