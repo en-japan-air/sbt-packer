@@ -6,7 +6,7 @@ organization := "com.en-japan"
 
 name := "sbt-packer"
 
-scalacOptions in Compile ++= Seq("-deprecation", "-target:jvm-1.6")
+scalacOptions in Compile ++= Seq("-feature", "-deprecation", "-target:jvm-1.6")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-M4" % "provided")
 
