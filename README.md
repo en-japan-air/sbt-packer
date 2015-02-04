@@ -28,8 +28,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-M4")
 addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.3")
 ```
 
-## Usage
-
 Add the following to your build.sbt
 ```scala
 enablePlugins(JDebPackaging, PackerPlugin)
@@ -50,6 +48,10 @@ enablePlugins(PackerPlugin)
 // With native dpkg you also need to specify a maintainer for the deb package.
 maintainer := "John Smith <john@smith.com>"
 ```
+
+## Usage
+
+Have your AWS credentials in your environment variables (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) or in `~/.aws/credentials`)
 
 Use the command
 ```shell
