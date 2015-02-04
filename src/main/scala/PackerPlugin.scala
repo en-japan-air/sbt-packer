@@ -1,16 +1,16 @@
 package com.enjapan.sbt.packer
 
 import java.io.IOException
+import java.net.URL
 
 import scala.util.{Try,Success}
+import scala.language.postfixOps
 
 import sbt._
 import sbt.Keys.{ packageBin, target, name, streams, version}
 
 import com.typesafe.sbt.packager.archetypes.{JavaAppPackaging, TemplateWriter}
 import com.typesafe.sbt.packager.debian.DebianPlugin.autoImport.Debian
-import scala.language.postfixOps
-
 
 object PackerPlugin extends AutoPlugin {
 
@@ -97,16 +97,10 @@ object PackerPlugin extends AutoPlugin {
         case s => sys.error("Arch not supported: " + s)
       }
       val packerZip = "packer_" + version + "_" + os + "_" + arch + ".zip"
-      val packerUrl = "https://dl.bintray.com/mitchellh/packer/" + packerZip
+      val packerUrl = new URL("https://dl.bintray.com/mitchellh/packer/" + packerZip)
       log.info("Download Packer " + version + " at " + packerUrl)
-      val cmdCode = Process(Seq("wget", packerUrl, "-O", packerZip), Some(tmpDir)) #&&
-        Process(Seq("unzip", "-d", packerDir.getAbsolutePath(), packerZip), Some(tmpDir)) ! log
-      if(cmdCode == 0) {
-        log.info("Installed Packer in " + packerDir.getAbsolutePath)
-      } 
-      else {
-        throw new IOException("Could not retrieve Packer at " + packerUrl)
-      }
+      IO.unzipURL(packerUrl, packerDir) foreach { _.setExecutable(true) }
+      log.info("Downloaded Packer")
     }
     else {
       log.info("Found previously downloaded Packer in " + packerDir.getAbsolutePath())
@@ -115,5 +109,4 @@ object PackerPlugin extends AutoPlugin {
   }
 
   protected def getPackerConfigTemplate: java.net.URL = getClass.getResource("packer.json.template")
-
 }
