@@ -57,6 +57,13 @@ sbt packerBuildAmi
 ```
 This will launch the `debian:packageBin` task from `sbt-native-package` to create a `.deb` package and install it on an ubuntu instance.
 
+## Play application
+If you create an AMI with a Play application, the application will fail on
+start since it will try to write its PID file in the application folder where
+it has no write permission.
+Fix: Add `-Dpidfile.path=/var/run/$app_name/play.pid` to /etc/default/$app_name
+cf sbt/sbt-native-packager#241
+
 ## Configuration
 
 ```scala
