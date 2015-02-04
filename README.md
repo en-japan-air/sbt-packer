@@ -55,7 +55,11 @@ Use the command
 ```shell
 sbt packerBuildAmi
 ```
-This will launch the `debian:packageBin` task from `sbt-native-package` to create a `.deb` package and install it on an ubuntu instance.
+This will 
+- will check if you have Packer installed with the required version (default:
+  0.7.5) and download it you don't
+- launch the `debian:packageBin` task from `sbt-native-package` to create a `.deb` package
+- install it on amazon instance created from the AMI specified in packerSourceAmi (default: ubuntu see [Configuration](#Configuration))
 
 ## Play application
 If you create an AMI with a Play application, the application will fail on
@@ -67,6 +71,9 @@ cf sbt/sbt-native-packager#241
 ## Configuration
 
 ```scala
+// Specify the version of Packer you want to use
+packerVersion := "0.7.5"
+
 // Specify the id of the source ami to generate from
 packerSourceAmi := "ami-64e27e0c"
 
