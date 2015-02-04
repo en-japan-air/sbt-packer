@@ -32,7 +32,23 @@ addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.2")
 
 Add the following to your build.sbt
 ```scala
+enablePlugins(JDebPackaging, PackerPlugin)
+```
+
+If you want to use native packager tools you should have installed (cf
+[sbt-native-packager](http://www.scala-sbt.org/sbt-native-packager/formats/debian.html#requirements):
+- dpkg-deb
+- dpkg-sig
+- dpkg-genchanges
+- lintian
+- fakeroot
+
+Then you can use
+```scala
 enablePlugins(PackerPlugin)
+
+// With native dpkg you also need to specify a maintainer for the deb package.
+maintainer := "John Smith <john@smith.com>"
 ```
 
 Use the command
