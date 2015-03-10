@@ -37,9 +37,10 @@ object PackerPlugin extends AutoPlugin {
 
   override def projectSettings = Seq(
     packerVersion := "0.7.5",
-    packerSourceAmi := "ami-64e27e0c",
-    packerInstanceType := "ubuntu",
     packerRegion := "us-east-1",
+    packerSourceAmi := {
+     UbuntuAMIFinder.find()(packerRegion.value)("amd64")
+    },
     packerInstanceType := "t1.micro",
     packerSshUsername := "ubuntu",
     packerAmiName <<= (name, version) { (n,v) =>  n + "-" + v + "-{{timestamp}}"},
