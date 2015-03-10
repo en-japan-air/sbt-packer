@@ -76,14 +76,15 @@ cf sbt/sbt-native-packager#241
 // Specify the version of Packer you want to use
 packerVersion := "0.7.5"
 
-// Specify the id of the source ami to generate from
+// Specify the id of the source ami to generate from (defaults to current
+trusty ubuntu amd64 ebs AMI)
 packerSourceAmi := "ami-64e27e0c"
 
-// Specify instance type
-packerInstanceType := "ubuntu"
-
-// Specify the region
+// Specify AWS region
 packerRegion := "us-east-1"
+
+// List of regions to copy the AMI to (defaults Set())
+packerAmiRegions := Set("us-west-2", "ap-northeast-1")
 
 // Specify the instance type
 packerInstanceType := "t1.micro"

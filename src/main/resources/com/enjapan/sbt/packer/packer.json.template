@@ -8,6 +8,7 @@
     "access_key": "{{user `aws_access_key`}}",
     "secret_key": "{{user `aws_secret_key`}}",
     "region": "${{region}}",
+    "ami_regions": ${{ami_regions}},
     "source_ami": "${{source_ami}}",
     "instance_type": "${{instance_type}}",
     "ssh_username": "${{ssh_username}}",

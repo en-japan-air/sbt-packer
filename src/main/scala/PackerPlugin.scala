@@ -11,6 +11,8 @@ import sbt.Keys.{ packageBin, target, name, streams, version}
 
 import com.typesafe.sbt.packager.archetypes.{JavaAppPackaging, TemplateWriter}
 import com.typesafe.sbt.packager.debian.DebianPlugin.autoImport.Debian
+import org.json4s.JsonDSL._
+import org.json4s.native.JsonMethods._
 
 object PackerPlugin extends AutoPlugin {
 
@@ -22,6 +24,7 @@ object PackerPlugin extends AutoPlugin {
     val packerSourceAmi = settingKey[String]("Id of the source AMI to generate from")
     val packerInstanceType = settingKey[String]("AWS Instance type")
     val packerRegion = settingKey[String]("AWS region")
+    val packerAmiRegions = settingKey[Set[String]]("List of regions to copy the AMI to")
     val packerSshUsername = settingKey[String]("Username of the user to ssh with")
 
     val packerConfig = taskKey[File]("Generates a Packer configuration file")
@@ -38,6 +41,7 @@ object PackerPlugin extends AutoPlugin {
   override def projectSettings = Seq(
     packerVersion := "0.7.5",
     packerRegion := "us-east-1",
+    packerAmiRegions := Set(),
     packerSourceAmi := {
      UbuntuAMIFinder.find()(packerRegion.value)("amd64")
     },
@@ -46,11 +50,12 @@ object PackerPlugin extends AutoPlugin {
     packerAmiName <<= (name, version) { (n,v) =>  n + "-" + v + "-{{timestamp}}"},
     packerConfig := makePackerConfig(target.value, (packageBin in Debian).value, packerConfigTemplate.value, packerConfigTemplateReplacements.value),
     packerConfigTemplate := getPackerConfigTemplate,
-    packerConfigTemplateReplacements <<= (packerAmiName, packerSourceAmi, packerInstanceType, packerRegion, packerSshUsername) {
-      (amiName, sourceAmi, instanceType, region, sshUsername) => 
+    packerConfigTemplateReplacements <<= (packerAmiName, packerSourceAmi, packerInstanceType, packerRegion, packerAmiRegions, packerSshUsername) {
+      (amiName, sourceAmi, instanceType, region, amiRegions, sshUsername) => 
         Seq(
           "ami_name" → amiName,
           "region" → region,
+          "ami_regions" -> compact(render(amiRegions.toSeq)),
           "ssh_username" → sshUsername,
           "source_ami" → sourceAmi,
           "instance_type" → instanceType
