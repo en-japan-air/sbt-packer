@@ -67,8 +67,9 @@ This will
 If you create an AMI with a Play application, the application will fail on
 start since it will try to write its PID file in the application folder where
 it has no write permission.
+
 Fix: Add `-Dpidfile.path=/var/run/$app_name/play.pid` to /etc/default/$app_name
-cf sbt/sbt-native-packager#241
+(cf [sbt/sbt-native-packager#241](https://github.com/sbt/sbt-native-packager/issues/241#issuecomment-42141586))
 
 ## Configuration
 
