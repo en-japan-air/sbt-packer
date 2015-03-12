@@ -53,6 +53,11 @@ maintainer := "John Smith <john@smith.com>"
 
 Have your AWS credentials in your environment variables (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) or in `~/.aws/credentials`)
 
+First you can validate your build
+```shell
+sbt packerValidateConf
+```
+
 Use the command
 ```shell
 sbt packerBuild

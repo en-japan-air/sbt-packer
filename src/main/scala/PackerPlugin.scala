@@ -73,8 +73,7 @@ object PackerPlugin extends AutoPlugin {
     },
     packerCommand <<= (packerVersion, target, streams) map { (v, t, s) => checkInstalledPacker(v,s.log).getOrElse(getPacker(v, t, s.log)) },
     packerBuild <<= (packerValidateConf, packerConfigFile, packerCommand) map { (valid, conf, cmd) => 
-      if (!valid)
-        throw new Exception(s"Packer configuration not valid (see ${conf.getAbsolutePath})")
+      if (!valid) throw new Exception(s"Packer configuration not valid (see ${conf.getAbsolutePath})")
       build(conf,cmd) 
     },
     packerAmazonBuilder <<= (packerAmiName, packerSourceAmi, packerInstanceType, packerRegion, packerAmiRegions, packerSshUsername) map {
@@ -86,7 +85,12 @@ object PackerPlugin extends AutoPlugin {
     packerProvisioners := (installJava +: packerPackageInstallProvisioners.value),
     packerConfig <<= (packerBuilders, packerProvisioners) map { (bs, ps) => PackerConfig(bs,ps) },
     packerConfigFile <<= (target, packerConfig) map { (t,p) => writePackerConfig(t,p) },
-    packerValidateConf := validateConf(packerConfigFile.value, packerCommand.value)
+    packerValidateConf := {
+      val conf = packerConfigFile.value
+      val valid = validateConf(conf, packerCommand.value)
+      if (!valid) throw new Exception(s"Packer configuration not valid (see ${conf.getAbsolutePath})")
+      valid
+    }
   )
 
   private[packer] def writePackerConfigOld(tmpDir: File, pkg:File, source: java.net.URL, replacements: Seq[(String, String)]): File = {
