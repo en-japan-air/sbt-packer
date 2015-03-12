@@ -55,7 +55,7 @@ Have your AWS credentials in your environment variables (`AWS_ACCESS_KEY_ID` and
 
 Use the command
 ```shell
-sbt packerBuildAmi
+sbt packerBuild
 ```
 This will 
 - will check if you have Packer installed with the required version (default:
@@ -96,6 +96,36 @@ packerSshUsername := "ubuntu"
 // Specify the name of the generated ami (defaults to <name>-<version>-{{timestamp}})
 packerAmiName := "super-ami"
 ```
+
+### Going further
+
+You can write your own builders and provisioners too!
+
+```scala
+import com.enjapan.sbt.packer.Packer._
+
+packerProvisioners += ShellProvisioner(Seq("echo Hello World!))
+
+packerBuilders += VirtualBoxBuilder(
+    guestOsType = "Ubuntu_64",
+    isoUrl = "http://releases.ubuntu.com/12.04/ubuntu-12.04.5-server-amd64.iso",
+    isoChecksum = "769474248a3897f4865817446f9a4a53",
+    isoChecksumType = "md5",
+    sshUsername = "packer",
+    sshPassword = "packer",
+    sshWaitTimeout = "30s",
+    shutdownCommand = "echo 'packer' | sudo -S shutdown -P now"
+)
+```
+
+### Old way
+
+To use the previous template way
+
+```scala
+packerConfigFile <<= packerConfigFileOld
+```
+
 
 ## License
 Copyright 2015 en japan, Inc.

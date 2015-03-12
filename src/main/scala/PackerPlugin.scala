@@ -30,7 +30,7 @@ object PackerPlugin extends AutoPlugin {
     val packerSshUsername = settingKey[String]("Username of the user to ssh with")
 
     val packerConfigFileOld = taskKey[File]("Generates a Packer configuration file")
-    val packerBuildAmi = taskKey[Unit]("Builds a new amazon AMI")
+    val packerBuild = taskKey[Unit]("Builds with Packer")
 
     val packerConfigTemplate = settingKey[java.net.URL]("Location of Packer configuration template")
     val packerConfigTemplateReplacements = settingKey[Seq[(String, String)]]("Replacements for Packer configuration template")
@@ -72,10 +72,10 @@ object PackerPlugin extends AutoPlugin {
         )
     },
     packerCommand <<= (packerVersion, target, streams) map { (v, t, s) => checkInstalledPacker(v,s.log).getOrElse(getPacker(v, t, s.log)) },
-    packerBuildAmi <<= (packerValidateConf, packerConfigFile, packerCommand) map { (valid, conf, cmd) => 
+    packerBuild <<= (packerValidateConf, packerConfigFile, packerCommand) map { (valid, conf, cmd) => 
       if (!valid)
         throw new Exception(s"Packer configuration not valid (see ${conf.getAbsolutePath})")
-      buildAmi(conf,cmd) 
+      build(conf,cmd) 
     },
     packerAmazonBuilder <<= (packerAmiName, packerSourceAmi, packerInstanceType, packerRegion, packerAmiRegions, packerSshUsername) map {
           (amiName, sourceAmi, instanceType, region, amiRegions, sshUsername) =>
@@ -115,7 +115,7 @@ object PackerPlugin extends AutoPlugin {
     Process(Seq(packerCmd, "validate", packerConf.getAbsolutePath())).! == 0
   }
 
-  private[packer] def buildAmi(packerConf: File, packerCmd:String): Unit = {
+  private[packer] def build(packerConf: File, packerCmd:String): Unit = {
     Process(Seq(packerCmd, "build", packerConf.getAbsolutePath())).!
   }
 
