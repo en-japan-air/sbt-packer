@@ -25,7 +25,7 @@ resolvers += Resolver.url(
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-M4")
 
-addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.5")
+addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.4")
 ```
 
 Add the following to your build.sbt
