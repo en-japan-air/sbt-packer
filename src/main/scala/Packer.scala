@@ -9,7 +9,7 @@ object Packer {
     "_" + m.group(0).toLowerCase()
   })
 
-  implicit val formats = DefaultFormats + FieldSerializer[TypedComponent](
+  val typedComponentSerializer = FieldSerializer[TypedComponent](
   { case (key,v) => Some(camelToUnderscores(key),v) }
   )
 
@@ -19,6 +19,7 @@ object Packer {
     variables:Map[String,String] =
       Map("aws_access_key" -> "{{env `AWS_ACCESS_KEY_ID`}}", "aws_secret_key" -> "{{env `AWS_SECRET_ACCESS_KEY`}}" )) 
   {
+    implicit val formats = DefaultFormats + typedComponentSerializer
     lazy val toJson = Extraction.decompose(this) 
     lazy val build = pretty(render(toJson))
   }
@@ -40,6 +41,19 @@ object Packer {
     secretKey: String = "{{user `aws_secret_key`}}"
   ) extends Builder {
     val `type` = "amazon-ebs"
+  }
+
+  case class VirtualBoxBuilder(
+    guestOsType: String,
+    isoUrl: String,
+    isoChecksum: String,
+    isoChecksumType: String,
+    sshUsername:String,
+    sshPassword:String,
+    sshWaitTimeout:String,
+    shutdownCommand:String
+  ) extends Builder {
+    val `type` = "virtualbox-iso"
   }
 
   trait Provisioner extends TypedComponent
