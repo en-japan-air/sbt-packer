@@ -83,7 +83,7 @@ Fix: Add `-Dpidfile.path=/var/run/$app_name/play.pid` to /etc/default/$app_name
 packerVersion := "0.7.5"
 
 // Specify the id of the source ami to generate from (defaults to current
-trusty ubuntu amd64 ebs AMI)
+// trusty ubuntu amd64 ebs AMI)
 packerSourceAmi := "ami-64e27e0c"
 
 // Specify AWS region
