@@ -25,7 +25,7 @@ resolvers += Resolver.url(
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-M4")
 
-addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.5")
+addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.6")
 ```
 
 Add the following to your build.sbt
@@ -82,11 +82,10 @@ Fix: Add `-Dpidfile.path=/var/run/$app_name/play.pid` to /etc/default/$app_name
 // Specify the version of Packer you want to use
 packerVersion := "0.7.5"
 
-// Specify the id of the source ami to generate from (defaults to current
-trusty ubuntu amd64 ebs AMI)
+// Specify the id of the source ami to generate from (defaults to current trusty ubuntu amd64 ebs AMI)
 packerSourceAmi := "ami-64e27e0c"
 
-// Specify AWS region
+// Specify AWS region in which the instance from which the AMI will be created will be run
 packerRegion := "us-east-1"
 
 // List of regions to copy the AMI to (defaults Set())
@@ -100,6 +99,9 @@ packerSshUsername := "ubuntu"
 
 // Specify the name of the generated ami (defaults to <name>-<version>-{{timestamp}})
 packerAmiName := "super-ami"
+
+// Specify some tags to add to the created AMI (defaults to Map.empty[String,String])
+packerAmiTags := Map("name" -> "AwesomeAMI")
 ```
 
 ### Going further
