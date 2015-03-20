@@ -36,7 +36,8 @@ object Packer {
     instanceType: String,
     region: String,
     sshUsername: String,
-    amiRegions: Set[String] = Set.empty,
+    amiRegions: Set[String],
+    tags: Map[String,String],
     accessKey:String = "{{user `aws_access_key`}}",
     secretKey: String = "{{user `aws_secret_key`}}"
   ) extends Builder {

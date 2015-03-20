@@ -28,6 +28,7 @@ object PackerPlugin extends AutoPlugin {
     val packerRegion = settingKey[String]("AWS region")
     val packerAmiRegions = settingKey[Set[String]]("List of regions to copy the AMI to")
     val packerSshUsername = settingKey[String]("Username of the user to ssh with")
+    val packerAmiTags = settingKey[Map[String,String]]("Tags to be associated with the AMI")
 
     val packerConfigFileOld = taskKey[File]("Generates a Packer configuration file")
     val packerBuild = taskKey[Unit]("Builds with Packer")
@@ -51,12 +52,13 @@ object PackerPlugin extends AutoPlugin {
   override def projectSettings = Seq(
     packerVersion := "0.7.5",
     packerRegion := "us-east-1",
-    packerAmiRegions := Set(),
+    packerAmiRegions := Set.empty,
     packerSourceAmi := {
      UbuntuAMIFinder.find()(packerRegion.value)("amd64")
     },
     packerInstanceType := "t1.micro",
     packerSshUsername := "ubuntu",
+    packerAmiTags := Map.empty,
     packerAmiName <<= (name, version) { (n,v) =>  n + "-" + v + "-{{timestamp}}"},
     packerConfigFileOld := writePackerConfigOld(target.value, (packageBin in Debian).value, packerConfigTemplate.value, packerConfigTemplateReplacements.value),
     packerConfigTemplate := getPackerConfigTemplate,
@@ -76,9 +78,9 @@ object PackerPlugin extends AutoPlugin {
       if (!valid) throw new Exception(s"Packer configuration not valid (see ${conf.getAbsolutePath})")
       build(conf,cmd) 
     },
-    packerAmazonBuilder <<= (packerAmiName, packerSourceAmi, packerInstanceType, packerRegion, packerAmiRegions, packerSshUsername) map {
-          (amiName, sourceAmi, instanceType, region, amiRegions, sshUsername) =>
-            AmazonEbsBuilder(amiName, sourceAmi, instanceType, region, sshUsername, amiRegions)
+    packerAmazonBuilder <<= (packerAmiName, packerSourceAmi, packerInstanceType, packerRegion, packerAmiRegions, packerSshUsername, packerAmiTags) map {
+          (amiName, sourceAmi, instanceType, region, amiRegions, sshUsername, tags) =>
+            AmazonEbsBuilder(amiName, sourceAmi, instanceType, region, sshUsername, amiRegions, tags)
     },
     packerBuilders <<= packerAmazonBuilder map { b => Seq(b) },
     packerPackageInstallProvisioners <<=  (packageBin in Debian) map makeInstallProvisioners,
