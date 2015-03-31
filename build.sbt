@@ -10,6 +10,8 @@ scalacOptions in Compile ++= Seq("-feature", "-deprecation", "-target:jvm-1.6")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-RC1" % "provided")
 
+libraryDependencies += "org.json4s" %% "json4s-native" % "3.2.11"
+
 // Scripted
 ScriptedPlugin.scriptedSettings
 
