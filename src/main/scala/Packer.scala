@@ -13,13 +13,16 @@ object Packer {
   { case (key,v) => Some(camelToUnderscores(key),v) }
   )
 
+  val traversableSerializer = FieldSerializer[TypedComponent](
+  { case (_,v:TraversableOnce[_]) if v.isEmpty => None }
+  )
+
   case class PackerConfig( 
     builders:Seq[Builder], 
     provisioners:Seq[Provisioner], 
-    variables:Map[String,String] =
-      Map("aws_access_key" -> "{{env `AWS_ACCESS_KEY_ID`}}", "aws_secret_key" -> "{{env `AWS_SECRET_ACCESS_KEY`}}" )) 
+    variables:Map[String,String] = Map())
   {
-    implicit val formats = DefaultFormats + typedComponentSerializer
+    implicit val formats = DefaultFormats + typedComponentSerializer + traversableSerializer
     lazy val toJson = Extraction.decompose(this) 
     lazy val build = pretty(render(toJson))
   }
@@ -37,9 +40,7 @@ object Packer {
     region: String,
     sshUsername: String,
     amiRegions: Set[String],
-    tags: Map[String,String],
-    accessKey:String = "{{user `aws_access_key`}}",
-    secretKey: String = "{{user `aws_secret_key`}}"
+    tags: Map[String,String]
   ) extends Builder {
     val `type` = "amazon-ebs"
   }
