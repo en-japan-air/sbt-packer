@@ -11,8 +11,7 @@ import sbt.Keys.{ packageBin, target, name, streams, version}
 
 import com.typesafe.sbt.packager.archetypes.{JavaAppPackaging, TemplateWriter}
 import com.typesafe.sbt.packager.debian.DebianPlugin.autoImport.Debian
-import org.json4s.JsonDSL._
-import org.json4s.native.JsonMethods._
+import upickle._
 
 object PackerPlugin extends AutoPlugin {
 
@@ -67,7 +66,7 @@ object PackerPlugin extends AutoPlugin {
         Seq(
           "ami_name" → amiName,
           "region" → region,
-          "ami_regions" -> compact(render(amiRegions.toSeq)),
+          "ami_regions" -> write(amiRegions.toSeq),
           "ssh_username" → sshUsername,
           "source_ami" → sourceAmi,
           "instance_type" → instanceType
