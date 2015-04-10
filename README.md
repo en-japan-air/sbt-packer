@@ -23,7 +23,9 @@ resolvers += Resolver.url(
    url("https://dl.bintray.com/en-japan/sbt"))(
        Resolver.ivyStylePatterns)
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-M4")
+resolvers += "En Japan" at "https://raw.github.com/en-japan/repository/master/releases"
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-RC1")
 
 addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.6")
 ```
