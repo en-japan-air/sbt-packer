@@ -18,8 +18,8 @@ TaskKey[Unit]("generate-valid-config") <<= (packerValidateConf, packerConfigFile
     assert(config.contains(sourceAmi), "Config doesn't contain the right source ami" + config)
     assert(config.contains(instanceType), "Config doesn't contain the right instance type" + config)
     assert(config.contains(region), "Config doesn't contain the right region" + config)
-    assert(config.contains(sshUsername), "Config doesn't contain the right username" + config)
-    assert(tags forall { case (key,value) =>  config.contains(key) && config.contains(value) }, "Config doesn't contain the right username" + config)
+    assert(config.contains(sshUsername), s"Config doesn't contain the right username ($sshUsername)" + config)
+    assert(tags forall { case (key,value) =>  config.contains(key) && config.contains(value) }, s"Config doesn't contain the right tags($tags)" + config)
     assert(amiRegions forall (config.split("\n").filter(_.contains("ami_regions"))(0) contains))
     s.log.info("Generated configuration validated")
 }
