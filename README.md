@@ -9,7 +9,7 @@ Still in a work in progress since it only supports Debian/Ubuntu types of
 instances.
 
 ## Prerequisites
-The plugin assumes that sbt-native-packager 1.0.0-M4 has been included in
+The plugin assumes that sbt-native-packager 1.0.x has been included in
 your SBT build configuration, and its settings have been
 initialized. This can by done by adding the plugin following instructions at
 http://www.scala-sbt.org/sbt-native-packager/.
@@ -25,7 +25,7 @@ resolvers += Resolver.url(
 
 resolvers += "En Japan" at "https://raw.github.com/en-japan/repository/master/releases"
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-RC1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.1")
 
 addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.7")
 ```
