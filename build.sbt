@@ -8,7 +8,7 @@ name := "sbt-packer"
 
 scalacOptions in Compile ++= Seq("-feature", "-deprecation", "-target:jvm-1.6")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-RC1" % "provided")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.1" % "provided")
 
 resolvers += "En Japan" at "https://raw.github.com/en-japan/repository/master/releases"
 
