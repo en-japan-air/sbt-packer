@@ -1,15 +1,27 @@
+sudo: false
 language: scala
 os:
 - linux
 scala:
-- 2.10.4
+- 2.10.5
 jdk:
-- openjdk6
+- openjdk7
+- oraclejdk8
+
 script:
 - sbt ++$TRAVIS_SCALA_VERSION scripted
+# Tricks to avoid unnecessary cache updates
+- find $HOME/.sbt -name "*.lock" | xargs rm
+- find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+
 after_success:
 - |
   test "${TRAVIS_TAG}" && sh "$TRAVIS_BUILD_DIR/.travis.credentials.sh" && sbt publish
+
+cache:
+  directories:
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/boot/"
 env:
   global:
   - secure: SSctxbzI+iHgSKhUjWVAc2Y2dG/RmzRUlsiHk5IDYPtV+obudeoqAiYJwfnxKoDT/2q/WiuCuQqBTZkOcHjI1vSEW9iQF1+u5whIVCOvZS15TC9rKXHI0oy91e4NwB/SHeW4fqTfwC/KQgbbNCyV1DHLs7j49dWVPV+jcI6dxoY=
