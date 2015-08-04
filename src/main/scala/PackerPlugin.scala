@@ -49,7 +49,7 @@ object PackerPlugin extends AutoPlugin {
   import autoImport._
 
   override def projectSettings = Seq(
-    packerVersion := "0.7.5",
+    packerVersion := "0.8.2",
     packerRegion := "us-east-1",
     packerAmiRegions := Set.empty,
     packerSourceAmi := {
