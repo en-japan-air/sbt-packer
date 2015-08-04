@@ -22,14 +22,10 @@ scriptedLaunchOpts <+= version apply { v => "-Dplugin.version="+v }
 // Publish settings
 publishMavenStyle := false
 
-bintraySettings
+bintrayOrganization := Some("en-japan")
 
-bintrayPublishSettings
+bintrayRepository := "sbt"
 
-bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("en-japan")
-
-bintray.Keys.repository in bintray.Keys.bintray := "sbt"
-
-bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("sbt", "packer", "sbt-native-packager")
+bintrayPackageLabels := Seq("sbt", "packer", "sbt-native-packager")
 
 licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
