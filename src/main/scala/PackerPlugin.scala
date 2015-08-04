@@ -1,17 +1,14 @@
 package com.enjapan.sbt.packer
 
-import java.io.IOException
 import java.net.URL
-
-import scala.util.{Try,Success}
-import scala.language.postfixOps
-
-import sbt._
-import sbt.Keys.{ packageBin, target, name, streams, version}
 
 import com.typesafe.sbt.packager.archetypes.{JavaAppPackaging, TemplateWriter}
 import com.typesafe.sbt.packager.debian.DebianPlugin.autoImport.Debian
-import upickle._
+import sbt.Keys.{name, packageBin, streams, target, version}
+import sbt._
+
+import scala.language.postfixOps
+import scala.util.{Success, Try}
 
 object PackerPlugin extends AutoPlugin {
 
@@ -75,11 +72,10 @@ object PackerPlugin extends AutoPlugin {
         Seq(
           "ami_name" → amiName,
           "region" → region,
-          "ami_regions" -> write(amiRegions.toSeq),
           "ssh_username" → sshUsername,
           "source_ami" → sourceAmi,
           "instance_type" → instanceType
-        )
+        ) ++ amiRegions.reduceOption(_ + "\",\"" + _).map ( s => "ami_regions" -> ("[\"" + s + "\"]") )
     },
     packerCommand <<= (packerVersion, target, streams) map { (v, t, s) => checkInstalledPacker(v,s.log).getOrElse(getPacker(v, t, s.log)) },
     packerBuild <<= (packerValidateConf, packerConfigFile, packerCommand) map { (valid, conf, cmd) => 

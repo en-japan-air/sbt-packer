@@ -1,57 +1,34 @@
 package com.enjapan.sbt.packer
 
-import upickle._
-import scala.reflect.ClassTag
+import com.fasterxml.jackson.annotation.JsonInclude.Include
+import com.fasterxml.jackson.databind.{ObjectMapper, PropertyNamingStrategy}
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 
 
 object Packer {
-  case class PackerConfig( 
-    builders:Seq[Builder], 
-    provisioners:Seq[Provisioner], 
-    variables:Map[String,String] = Map()) {
 
-      object customConfig extends upickle.config.DefaultConfig {
-
-        val myAnnotator: Annotator = new Annotator {
-          val key = "type"
-
-          private def camelToUnderscores(name: String) = "[A-Z]".r.replaceAllIn(name, {m =>
-            "_" + m.group(0).toLowerCase()
-          })
-
-          override def annotate[V: ClassTag](w: Writer[V], name: String) = Writer[V] {
-            case x: V => w.write(x) match {
-              case o: Js.Obj => Js.Obj((key -> Js.Str(name)) +: (o.value map {case (k,v) => (camelToUnderscores(k),v)}) :_*)
-              case o => Js.Arr(Js.Str(name), o)
-            }
-          }
-
-          override def annotate[V](r: Reader[V], name: String) = Reader[V] {
-            case o: Js.Obj if o.value.contains(key -> Js.Str(name)) => r.read(o)
-            case Js.Arr(Js.Str(`name`), x) => r.read(x)
-          }
-        }
-
-        override implicit val annotator = myAnnotator
-      }
-          
-      import customConfig._
-
-      implicit def BuilderW: Writer[Builder] = Writer[Builder] {
-        case b:AmazonEbsBuilder => writeJs(b)
-        case b:VirtualBoxBuilder => writeJs(b)
-      }
-      implicit def ProvisionerW: Writer[Provisioner] = Writer[Provisioner] {
-        case p:FileProvisioner => writeJs(p)
-        case p:ShellProvisioner => writeJs(p)
-      }
-
-      lazy val build = write(this)
+  val mapper = new ObjectMapper() with ScalaObjectMapper {
+    registerModule(DefaultScalaModule)
+    setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
+    setSerializationInclusion(Include.NON_EMPTY)
   }
 
-  sealed trait Builder
+  case class PackerConfig(
+    builders:Seq[Builder],
+    provisioners:Seq[Provisioner],
+    variables:Map[String,String] = Map())
+  {
+    def build = mapper.writeValueAsString(this)
+  }
 
-  @key("amazon-ebs") case class AmazonEbsBuilder(
+  protected trait TypedComponent {
+    val `type`:String
+  }
+
+  trait Builder extends TypedComponent
+
+  case class AmazonEbsBuilder(
     amiName:String,
     sourceAmi: String,
     instanceType: String,
@@ -59,9 +36,11 @@ object Packer {
     sshUsername: String,
     amiRegions: Set[String],
     tags: Map[String,String]
-  ) extends Builder
+    ) extends Builder {
+    val `type` = "amazon-ebs"
+  }
 
-  @key("virtualbox-iso") case class VirtualBoxBuilder(
+  case class VirtualBoxBuilder(
     guestOsType: String,
     isoUrl: String,
     isoChecksum: String,
@@ -70,11 +49,19 @@ object Packer {
     sshPassword:String,
     sshWaitTimeout:String,
     shutdownCommand:String
-  ) extends Builder
+    ) extends Builder {
+    val `type` = "virtualbox-iso"
+  }
 
-  sealed trait Provisioner 
-  @key("file") case class FileProvisioner(source:String, destination:String) extends Provisioner
-  @key("shell") case class ShellProvisioner(inline:Seq[String]) extends Provisioner 
+  trait Provisioner extends TypedComponent
+
+  case class FileProvisioner(source:String, destination:String) extends Provisioner {
+    val `type` = "file"
+  }
+
+  case class ShellProvisioner(inline:Seq[String]) extends Provisioner {
+    val `type` = "shell"
+  }
 
   val installJava:ShellProvisioner = ShellProvisioner(Seq(
     "sudo add-apt-repository -y ppa:webupd8team/java",

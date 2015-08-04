@@ -10,11 +10,9 @@ scalacOptions in Compile ++= Seq("-feature", "-deprecation", "-target:jvm-1.6")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.1" % "provided")
 
-resolvers += "En Japan" at "https://raw.github.com/en-japan/repository/master/releases"
-
-libraryDependencies += "com.en-japan" %% "upickle" % "0.2.9"
-
-libraryDependencies += "org.scalamacros" %% s"quasiquotes" % "2.0.0" % "provided"
+libraryDependencies ++= Seq(
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.0",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.6.0-1")
 
 // Scripted
 ScriptedPlugin.scriptedSettings
