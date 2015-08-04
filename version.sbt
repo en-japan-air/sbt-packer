@@ -1,3 +1,3 @@
-versionWithGit
+enablePlugins(GitVersioning)
 
 git.baseVersion := "0.0.8"
