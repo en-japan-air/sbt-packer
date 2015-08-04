@@ -44,6 +44,11 @@ object PackerPlugin extends AutoPlugin {
     val packerConfig = taskKey[PackerConfig]("")
     val packerConfigFile = taskKey[File]("")
     val packerValidateConf = taskKey[Boolean]("")
+
+    val packerUbuntuVersion = settingKey[String]("")
+    val packerUbuntuHvm = settingKey[Boolean]("")
+    val packerUbuntuEbs = settingKey[String]("")
+    val packerUbuntuArch = settingKey[String]("")
   }
 
   import autoImport._
@@ -52,8 +57,12 @@ object PackerPlugin extends AutoPlugin {
     packerVersion := "0.8.2",
     packerRegion := "us-east-1",
     packerAmiRegions := Set.empty,
-    packerSourceAmi := {
-     UbuntuAMIFinder.find()(packerRegion.value)("amd64")
+    packerUbuntuVersion := "vivid",
+    packerUbuntuHvm := true,
+    packerUbuntuEbs := "ebs",
+    packerUbuntuArch := "amd64",
+    packerSourceAmi <<= (packerUbuntuVersion, packerUbuntuHvm, packerUbuntuEbs,packerUbuntuArch, packerRegion) { (ubuntuVersion,hvm,ebs,arch,region) =>
+     UbuntuAMIFinder.find(version = ubuntuVersion, instanceType = ebs, hvm = hvm)(region)(arch)
     },
     packerInstanceType := "t2.micro",
     packerSshUsername := "ubuntu",
