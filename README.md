@@ -66,7 +66,7 @@ sbt packerBuild
 ```
 This will 
 - will check if you have Packer installed with the required version (default:
-  0.7.5) and download it you don't
+  0.8.2) and download it you don't
 - launch the `debian:packageBin` task from `sbt-native-package` to create a `.deb` package
 - install it on amazon instance created from the AMI specified in packerSourceAmi (default: ubuntu see [Configuration](#Configuration))
 
@@ -82,7 +82,7 @@ Fix: Add `-Dpidfile.path=/var/run/${{app_name}}/play.pid` to `src/templates/etc-
 
 ```scala
 // Specify the version of Packer you want to use
-packerVersion := "0.7.5"
+packerVersion := "0.8.2"
 
 // Specify the id of the source ami to generate from (defaults to current trusty ubuntu amd64 ebs AMI)
 packerSourceAmi := "ami-64e27e0c"
