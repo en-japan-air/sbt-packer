@@ -54,7 +54,7 @@ object PackerPlugin extends AutoPlugin {
     packerVersion := "0.8.2",
     packerRegion := "us-east-1",
     packerAmiRegions := Set.empty,
-    packerUbuntuVersion := "vivid",
+    packerUbuntuVersion := "trusty",
     packerUbuntuHvm := true,
     packerUbuntuEbs := "ebs",
     packerUbuntuArch := "amd64",
