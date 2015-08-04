@@ -94,7 +94,7 @@ packerRegion := "us-east-1"
 packerAmiRegions := Set("us-west-2", "ap-northeast-1")
 
 // Specify the instance type
-packerInstanceType := "t1.micro"
+packerInstanceType := "t2.micro"
 
 // Specify the name of the user to ssh with
 packerSshUsername := "ubuntu"

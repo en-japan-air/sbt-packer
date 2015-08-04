@@ -55,7 +55,7 @@ object PackerPlugin extends AutoPlugin {
     packerSourceAmi := {
      UbuntuAMIFinder.find()(packerRegion.value)("amd64")
     },
-    packerInstanceType := "t1.micro",
+    packerInstanceType := "t2.micro",
     packerSshUsername := "ubuntu",
     packerAmiTags := Map.empty,
     packerAmiName <<= (name, version) { (n,v) =>  n + "-" + v + "-{{timestamp}}"},
