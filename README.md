@@ -27,7 +27,7 @@ resolvers += "En Japan" at "https://raw.github.com/en-japan/repository/master/re
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.1")
 
-addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.7")
+addSbtPlugin("com.en-japan" % "sbt-packer" % "0.0.8")
 ```
 
 Add the following to your build.sbt
